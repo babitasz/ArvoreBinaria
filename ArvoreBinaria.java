@@ -19,53 +19,52 @@ public class ArvoreBinaria {
     }
 
     public void inserir(int valor) {
-        No novoNo = new No();
+        No novoNo = new No(); //cria um objeto nó
         novoNo.valor = valor;  // coloca o valor ao novo nó
 
         if (raiz == null) {
             raiz = novoNo;  // se a árvore estiver vazia, o novo nó se torna a raiz
         } else {
             No noatual = raiz; //começa pela raiz
-            No pai;
+            No pai; //"cria" um nó pai
 
-            while (true) {
-                pai = noatual;  // Mantém referência ao nó pai
+            while (true) { //loop para encaixar o novo nó no lugar certo
+                pai = noatual;  //mantém referência ao nó pai
 
                 if (valor < noatual.valor) { //se o valor for menor que o valor do nó atual, move para a esquerda
                     noatual = noatual.esquerda;
 
                     if (noatual == null) {  //se o filho da esquerda for null, insere o nó novo aqui
-                        pai.esquerda = novoNo;
-                        return;
+                        pai.esquerda = novoNo; //coloca a referencia do novo nó no pai
+                        return; //encerra
                     }
                 } else {
                     noatual = noatual.direita; //se o valor for maior, vai para a direita
 
                     if (noatual == null) {  //se o filho da direita estiver vazio (null), insere o nó aqui
-                        pai.direita = novoNo;
-                        return;
+                        pai.direita = novoNo; //coloca a referencia do novo nó no pai
+                        return; //encerra
                     }
                 }
             }
         }
     }
 
-    public int remover(int valor) {
-        No noAtual = raiz;
-        No pai = raiz;
-        boolean eFilhoEsquerda = true;
+    public int remover(int valor) { //função de remover nós
+        No noAtual = raiz; //vai começar a percorrer a árvore pela raiz
+        No pai = raiz; //o nó pai é iniciado na raíz
+        boolean eFilhoEsquerda = true; //bool que diz se o nó é filho da esquerda
 
-        // Procurar o nó a ser removido
-        while (noAtual.valor != valor) { //enquanto for diferente do valor solicitado
-            pai = noAtual;
-            if (valor < noAtual.valor) {  // Ir para a esquerda se for menor
-                eFilhoEsquerda = true;
-                noAtual = noAtual.esquerda;
-            } else {  // Ir para a direita se for maior
-                eFilhoEsquerda = false;
-                noAtual = noAtual.direita;
+        //loop que percorre a árvore em busca do nó a ser removido
+        while (noAtual.valor != valor) { //enquanto o nó for diferente do valor solicitado
+            pai = noAtual; //o pai é o nó atual
+            if (valor < noAtual.valor) {  //se o valor inserido for menor que o valor do nó atual vai pra esquerda
+                eFilhoEsquerda = true; //diz que é filho da esquerda
+                noAtual = noAtual.esquerda; //o novo nó atual é o nó da esquerda do antigo nó
+            } else {  //se o valor for maior que o valor do nó atual vai para a direita
+                eFilhoEsquerda = false; //não é filho da esquerda
+                noAtual = noAtual.direita; //o nó atual agora é o nó da direita do antigo nó
             }
-
             if (noAtual == null) {  // Se o nó não for encontrado
                 return -1;  // valor não encontrado
             }
@@ -81,7 +80,7 @@ public class ArvoreBinaria {
                 pai.direita = null; //remove a referencia do filho no pai
             }
         }
-        // caso 2: Nó tem um filho (somente à direita)
+        // caso 2: Nó tem um filho (direita)
         else if (noAtual.esquerda == null) { //se tiver filho na direita
             if (noAtual == raiz) {
                 raiz = noAtual.direita; //se for raiz, a nova raiz vai ser o filho da direita
@@ -91,7 +90,7 @@ public class ArvoreBinaria {
                 pai.direita = noAtual.direita; //muda a referência do pai para o filho da direita do nó que está sendo removido
             }
         }
-        // caso 2.1: Nó tem um filho (somente à esquerda)
+        // caso 2.1: Nó tem um filho (esquerda)
         else if (noAtual.direita == null) { //se n tiver filho na direita mas tiver na esquerda
             if (noAtual == raiz) {
                 raiz = noAtual.esquerda; //se for raiz, a nova raiz é o filho da esquerda do nó atual
@@ -101,7 +100,7 @@ public class ArvoreBinaria {
                 pai.direita = noAtual.esquerda; // se o nó a ser removido for filho da direita  muda a ref do pai para o filho da esquerda
             }
         }
-        // caso 3: nó tem dois filhos
+        // caso 3: nó tem dois filhos (pior caso, eca)
         else {
             No sucessor = getSucessor(noAtual); //função de achar sucessor
 
